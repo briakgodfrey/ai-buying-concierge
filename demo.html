@@ -201,10 +201,62 @@
       </section>
 
       <!-- Talk to a sales rep -->
-      <section class="cg-step cg-status" data-step="rep" aria-labelledby="qr-title" hidden>
+      <section class="cg-step cg-rep" data-step="rep" aria-labelledby="qr-title" hidden>
         <h3 id="qr-title" class="t-h2" tabindex="-1">Talk to a sales rep</h3>
-        <p class="t-body-md text-secondary">Your answers so far go with you, so you won't have to repeat them. The handoff form is coming in a later piece of this build.</p>
-        <button class="btn btn-secondary" type="button" data-action="resume">Back to the questions</button>
+        <p class="t-body-md text-secondary">A business sales rep will get in touch. They'll see your answers and any picks you looked at, so you won't have to repeat yourself.</p>
+        <p class="cg-hours t-body-sm" data-region="hours"></p>
+        <div class="cg-rep-grid">
+          <form class="cg-form" data-region="rep-form" novalidate>
+            <div class="cg-field">
+              <label class="t-label-sm" for="rep-name">Your name</label>
+              <input class="cg-input" id="rep-name" name="name" type="text" autocomplete="name" required aria-describedby="rep-name-error">
+              <p class="cg-error t-body-sm" id="rep-name-error" aria-live="polite"></p>
+            </div>
+            <div class="cg-field">
+              <label class="t-label-sm" for="rep-email">Work email</label>
+              <input class="cg-input" id="rep-email" name="email" type="email" autocomplete="email" required aria-describedby="rep-email-error">
+              <p class="cg-error t-body-sm" id="rep-email-error" aria-live="polite"></p>
+            </div>
+            <div class="cg-field">
+              <label class="t-label-sm" for="rep-company">Company <span class="text-secondary">(optional)</span></label>
+              <input class="cg-input" id="rep-company" name="company" type="text" autocomplete="organization">
+            </div>
+            <fieldset class="cg-field cg-pref">
+              <legend class="t-label-sm">How should we reach you?</legend>
+              <label class="cg-pref-option t-body-md"><input type="radio" name="contact" value="email" checked> Email</label>
+              <label class="cg-pref-option t-body-md"><input type="radio" name="contact" value="phone"> Phone call</label>
+            </fieldset>
+            <div class="cg-field">
+              <label class="t-label-sm" for="rep-phone">Phone <span class="text-secondary" data-region="phone-hint">(optional)</span></label>
+              <input class="cg-input" id="rep-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="rep-phone-error">
+              <p class="cg-error t-body-sm" id="rep-phone-error" aria-live="polite"></p>
+            </div>
+            <div class="cg-field">
+              <label class="t-label-sm" for="rep-notes">Anything else? <span class="text-secondary">(optional)</span></label>
+              <textarea class="cg-input cg-textarea" id="rep-notes" name="notes" rows="3" maxlength="500" placeholder="For example: we need them by the 20th, or half the team uses two monitors."></textarea>
+            </div>
+            <p class="t-body-sm text-secondary">Demo: nothing is sent or stored. A real store would use this only to contact you about this order.</p>
+            <div class="cg-status-actions">
+              <button class="btn btn-primary" type="submit">Send to a sales rep</button>
+              <button class="btn btn-secondary" type="button" data-action="resume">Back</button>
+            </div>
+          </form>
+          <aside class="cg-rep-summary" aria-labelledby="rep-sum-title">
+            <h4 id="rep-sum-title" class="t-h3">Goes with your request</h4>
+            <dl class="cg-summary" data-region="rep-summary"></dl>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Request sent -->
+      <section class="cg-step cg-status" data-step="sent" aria-labelledby="qs-title" hidden>
+        <h3 id="qs-title" class="t-h2" tabindex="-1">Request sent</h3>
+        <p class="t-body-md" data-region="sent-text"></p>
+        <p class="t-data-md text-secondary" data-region="sent-ref"></p>
+        <p class="t-body-sm text-secondary">This is a demo, so nothing was actually sent, and the form has been cleared.</p>
+        <div class="cg-status-actions">
+          <button class="btn btn-primary" type="button" data-action="after-sent">Back to your picks</button>
+        </div>
       </section>
     </div>
 

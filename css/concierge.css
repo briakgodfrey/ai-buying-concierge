@@ -170,3 +170,41 @@ body.cg-open { overflow: hidden; }
 @media (max-width: 960px) {
   .cg-nomatch { grid-template-columns: 1fr; }
 }
+
+/* Sales rep handoff */
+.cg-rep { gap: var(--space-3); }
+.cg-hours {
+  justify-self: start; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);
+  background: var(--color-bg-subtle); color: var(--color-text-primary);
+}
+.cg-rep-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--space-8); align-items: start; margin-top: var(--space-2); }
+.cg-form { display: grid; gap: var(--space-4); }
+.cg-field { display: grid; gap: var(--space-1); border: 0; margin: 0; padding: 0; min-width: 0; }
+.cg-input {
+  width: 100%; min-height: var(--size-control); padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-border-control); border-radius: var(--radius-sm);
+  background: var(--color-bg-surface); color: var(--color-text-primary);
+  font: inherit; font-size: var(--font-size-md);
+}
+.cg-input::placeholder { color: var(--color-text-secondary); }
+.cg-input:focus-visible { outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px; }
+.cg-input[aria-invalid="true"] { border-color: var(--color-text-critical); }
+.cg-textarea { resize: vertical; min-height: 96px; }
+.cg-pref { grid-auto-flow: column; justify-content: start; gap: var(--space-2) var(--space-6); }
+.cg-pref legend { margin-bottom: var(--space-2); padding: 0; }
+.cg-pref-option { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--size-touch-min); cursor: pointer; }
+.cg-pref-option input { width: 18px; height: 18px; margin: 0; accent-color: var(--color-bg-accent); }
+
+.cg-rep-summary {
+  display: grid; gap: var(--space-3); padding: var(--space-5);
+  border-radius: var(--radius-md); background: var(--color-bg-subtle); border: var(--border-width) solid var(--color-border-subtle);
+}
+.cg-summary { margin: 0; display: grid; gap: var(--space-1); }
+.cg-summary dt { margin-top: var(--space-2); }
+.cg-summary dt:first-child { margin-top: 0; }
+.cg-summary dd { margin: 0; }
+
+@media (max-width: 860px) {
+  .cg-rep-grid { grid-template-columns: 1fr; }
+  .cg-rep-summary { order: -1; }
+}

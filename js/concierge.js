@@ -56,7 +56,7 @@ if (dialog && opener) {
       nextBtn.textContent = step === TOTAL ? 'Show my picks' : 'Next';
     }
 
-    dialog.classList.toggle('is-wide', step === 'results' || step === 'nomatch');
+    dialog.classList.toggle('is-wide', ['results', 'nomatch', 'rep'].includes(step));
     renderAnswers();
 
     const heading = dialog.querySelector(`.cg-step[data-step="${step}"] h3`);
@@ -167,6 +167,7 @@ if (dialog && opener) {
         if (outageToggle && outageToggle.checked && !isRetry) throw new Error('Catalog unavailable');
         showResults();
       } catch (err) {
+        lastOutcome = { type: 'unavailable' };
         showStep('unavailable');
       }
     }, LOADING_MS);
@@ -189,6 +190,95 @@ if (dialog && opener) {
     }
     search(false);
   }
+
+  // ---------- Sales rep handoff ----------
+
+  const repForm = $('[data-region="rep-form"]');
+  const HOURS = 'Monday to Friday, 8 am to 7 pm ET';
+
+  // Reps work business hours in New York. Works out what to promise the buyer.
+  function contactWindow(now = new Date()) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York', weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hourCycle: 'h23'
+    }).formatToParts(now).map((p) => [p.type, p.value]));
+    const weekend = parts.weekday === 'Sat' || parts.weekday === 'Sun';
+    const hour = Number(parts.hour);
+    if (!weekend && hour >= 8 && hour < 19) {
+      return { open: true, note: `Reps are available now (${HOURS}).`, promise: 'within 2 business hours' };
+    }
+    // Next weekday morning, counted on the New York calendar
+    const d = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day), 12));
+    if (weekend || hour >= 19) d.setUTCDate(d.getUTCDate() + 1);
+    while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() + 1);
+    const label = d.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'short', day: 'numeric' });
+    return { open: false, note: `Reps are offline right now. Their hours are ${HOURS}.`, promise: `by 10 am ET on ${label}` };
+  }
+
+  function summaryRows() {
+    const rows = [];
+    if (state.qty) rows.push(['Laptops', String(state.qty)]);
+    if (state.use.length) rows.push(['Used for', state.use.join('; ')]);
+    if (state.travel) rows.push(['Travel', state.travel]);
+    if (state.budget) rows.push(['Budget per laptop', state.budget]);
+    if (lastOutcome || state.extras.length) rows.push(['Must-haves', state.extras.length ? state.extras.join('; ') : 'None']);
+    if (lastOutcome && lastOutcome.type === 'results') rows.push(['Picks shown', lastOutcome.picks.join(', ')]);
+    if (lastOutcome && lastOutcome.type === 'nomatch') rows.push(['What happened', lastOutcome.closest ? `Nothing fit the budget. Closest was ${lastOutcome.closest}.` : 'No model had every must-have.']);
+    if (lastOutcome && lastOutcome.type === 'unavailable') rows.push(['What happened', 'The catalog was unavailable, so no picks were shown.']);
+    if (typeof returnStep === 'number') rows.push(['Stopped at', `Question ${returnStep} of ${TOTAL}`]);
+    return rows;
+  }
+
+  function openHandoff() {
+    returnStep = step;
+    const win = contactWindow();
+    $('[data-region="hours"]').textContent = `${win.note} You'll hear back ${win.promise}.`;
+    $('[data-region="rep-summary"]').replaceChildren(...summaryRows().flatMap(([k, v]) => [el('dt', 't-label-sm text-secondary', k), el('dd', 't-body-sm', v)]));
+    showStep('rep');
+  }
+
+  function fieldError(id, message) {
+    const input = $(`#${id}`);
+    $(`#${id}-error`).textContent = message;
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    return !message;
+  }
+
+  function validateHandoff() {
+    const name = $('#rep-name').value.trim();
+    const email = $('#rep-email');
+    const phone = $('#rep-phone').value.trim();
+    const wantsCall = repForm.contact.value === 'phone';
+    const digits = phone.replace(/\D/g, '');
+    const checks = [
+      ['rep-name', name ? '' : 'Enter your name.'],
+      ['rep-email', !email.value.trim() ? 'Enter your work email.' : !email.validity.valid ? 'Enter an email address, like name@company.com.' : ''],
+      ['rep-phone', wantsCall && !phone ? 'Add a phone number so a rep can call you.' : phone && digits.length < 10 ? 'Enter a phone number with area code.' : '']
+    ];
+    const results = checks.map(([id, msg]) => fieldError(id, msg));
+    const firstBad = checks.find(([, msg]) => msg);
+    if (firstBad) $(`#${firstBad[0]}`).focus();
+    return results.every(Boolean);
+  }
+
+  repForm.addEventListener('change', (e) => {
+    if (e.target.name === 'contact') $('[data-region="phone-hint"]').textContent = repForm.contact.value === 'phone' ? '(needed for a call)' : '(optional)';
+  });
+  repForm.addEventListener('input', (e) => { if (e.target.id && $(`#${e.target.id}-error`)) fieldError(e.target.id, ''); });
+
+  repForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!validateHandoff()) return;
+    const first = $('#rep-name').value.trim().split(/\s+/)[0];
+    const how = repForm.contact.value === 'phone' ? 'call' : 'email';
+    const win = contactWindow();
+    $('#qs-title').textContent = `Thanks, ${first}. Your request is with a sales rep.`;
+    $('[data-region="sent-text"]').textContent = `A rep will ${how} you ${win.promise}, with your answers in hand.`;
+    $('[data-region="sent-ref"]').textContent = `Reference: REQ-${Math.floor(1000 + Math.random() * 9000)}`;
+    $('[data-action="after-sent"]').textContent = lastOutcome && lastOutcome.type === 'results' ? 'Back to your picks' : 'Close';
+    repForm.reset();
+    $('[data-region="phone-hint"]').textContent = '(optional)';
+    showStep('sent');
+  });
 
   // ---------- Results ----------
 
@@ -279,6 +369,8 @@ if (dialog && opener) {
   }
 
   let currentFixes = [];
+  // What the buyer saw last, so a sales rep gets the full picture
+  let lastOutcome = null;
 
   function showNoMatch(result) {
     $('#qn-title').textContent = result.copy.title;
@@ -287,6 +379,7 @@ if (dialog && opener) {
     $('[data-region="nomatch-cart"]').textContent = '';
 
     currentFixes = result.fixes;
+    lastOutcome = { type: 'nomatch', closest: result.closest ? result.closest.item.name : null };
     const items = result.fixes.map((fix, i) => {
       const li = el('li', 'cg-fix');
       const btn = el('button', 'btn btn-secondary', fix.label);
@@ -310,6 +403,7 @@ if (dialog && opener) {
     const result = recommend(state, CATALOG);
     if (result.status === 'no-match') { showNoMatch(result); return; }
     const picks = result.picks;
+    lastOutcome = { type: 'results', picks: picks.map((p) => p.item.name) };
     $('#qres-title').textContent = `${picks.length} ${picks.length === 1 ? 'pick' : 'picks'} for ${state.qty} ${state.qty === 1 ? 'laptop' : 'laptops'}`;
     $('[data-region="picks"]').replaceChildren(...picks.map((p, i) => card(p, state.qty, i)));
     $('[data-region="cart"]').textContent = '';
@@ -333,7 +427,8 @@ if (dialog && opener) {
     if (action === 'close') dialog.close();
     if (action === 'next') next();
     if (action === 'back' && typeof step === 'number' && step > 1) showStep(step - 1);
-    if (action === 'rep') { returnStep = step; showStep('rep'); }
+    if (action === 'rep') openHandoff();
+    if (action === 'after-sent') { if (lastOutcome && lastOutcome.type === 'results') showStep('results'); else dialog.close(); }
     if (action === 'resume') showStep(returnStep);
 
     if (action === 'edit') showStep(1);

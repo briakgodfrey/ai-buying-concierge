@@ -13,7 +13,7 @@ A self-directed concept project. Not built for or affiliated with any company. T
 - [x] Results: Good, Better and Best picks with team totals, promo limits and stock for the full quantity
 - [x] No match: the closest option, the gap per laptop and for the whole order, and tested ways to close it
 - [x] Catalog unavailable: no guesses shown, answers saved, Try again or talk to a sales rep
-- [ ] Sales rep handoff form
+- [x] Sales rep handoff: a short form, a summary of what goes with the request, and a promise based on the reps' real hours
 
 ## How it's built
 
@@ -33,8 +33,8 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 
 ## Design decisions
 
-- **Pine** marks actions and facts checked against the catalog.
-- **Iris** is reserved for the "AI-assisted" label, so AI content is always marked.
+- **Cobalt** marks actions and facts checked against the catalog.
+- **Orchid** is reserved for the "AI-assisted" label, so AI content is always marked.
 - **Amber** flags budget gaps. Nothing uses alarm red for a catalog outage, because that isn't the buyer's error.
 - **Catalog facts** (specs, prices, stock) are set in Geist Mono, so real data never looks like generated text.
 - Every text color pair meets WCAG AA in both themes. Controls are at least 44px tall.
@@ -45,5 +45,6 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 - Stock is checked for the full quantity, so "in stock" means every laptop can ship, with dates.
 - When nothing fits, the concierge explains why in plain words, then offers only fixes it has checked will work, such as "Raise the budget to $1,200 per laptop" with how many picks that unlocks.
 - If the catalog can't be reached, it shows no recommendations at all. It would rather say nothing than guess. The demo page has a switch to simulate this.
+- Talking to a person is always one click away. The handoff shows exactly what the rep will see, and after hours it promises the next business morning instead of pretending someone is waiting.
 - Best fit goes to the best match within budget, never the most expensive pick. Anything over budget is flagged.
 - On each recommendation, catalog facts and the AI-written reason are labeled differently, so a buyer can always tell which is which.
