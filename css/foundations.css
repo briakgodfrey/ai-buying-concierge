@@ -1,0 +1,54 @@
+/* Foundations page: a live specimen of the tokens. Only this page uses these styles. */
+
+.fd-header {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  max-width: 1120px; margin: 0 auto; padding: var(--space-6) var(--space-4) 0;
+}
+
+.fd-main { max-width: 1120px; margin: 0 auto; padding: var(--space-8) var(--space-4) var(--space-16); }
+
+.fd-intro { display: grid; gap: var(--space-3); max-width: 760px; }
+.fd-section { margin-top: var(--space-16); display: grid; gap: var(--space-4); }
+
+/* Sample card */
+.fd-card {
+  display: grid; gap: var(--space-4); max-width: 560px; padding: var(--space-6);
+  background: var(--color-bg-surface); border: var(--border-width) solid var(--color-border-default);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-card);
+}
+.fd-chips, .fd-price, .fd-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.fd-chip { display: inline-flex; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); }
+.fd-chip-ai { background: var(--color-bg-ai-subtle); color: var(--color-text-ai); }
+.fd-chip-accent { background: var(--color-bg-accent-subtle); color: var(--color-text-accent); }
+.fd-chip-warning { background: var(--color-bg-warning-subtle); color: var(--color-text-warning); }
+
+.fd-btn {
+  min-height: var(--size-control); padding: 0 var(--space-5); border-radius: var(--radius-sm);
+  border: var(--border-width) solid transparent; cursor: pointer;
+}
+.fd-btn-primary { background: var(--color-bg-accent); color: var(--color-text-on-accent); }
+.fd-btn-primary:hover { background: var(--color-bg-accent-hover); }
+.fd-btn-secondary { background: var(--color-bg-surface); color: var(--color-text-primary); border-color: var(--color-border-control); }
+.fd-btn-secondary:hover { background: var(--color-bg-hover); }
+
+/* Swatches */
+.fd-swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-4); }
+.fd-swatches li { display: grid; gap: var(--space-2); }
+.fd-sw { height: 56px; border-radius: var(--radius-sm); background: var(--sw); border: var(--border-width) solid var(--color-border-subtle); }
+.fd-swatches code { color: var(--color-text-secondary); }
+
+/* Type ramp */
+.fd-type { margin: 0; display: grid; gap: var(--space-5); }
+.fd-type div { display: grid; grid-template-columns: 180px 1fr; gap: var(--space-6); align-items: baseline; }
+.fd-type dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+/* Spacing and radius */
+.fd-space, .fd-radii { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-6); }
+.fd-space li, .fd-radii li { display: grid; gap: var(--space-2); justify-items: start; }
+.fd-space span { display: block; width: var(--w); height: 48px; background: var(--color-bg-accent); border-radius: 2px; }
+.fd-radii span { display: block; width: 96px; height: 64px; background: var(--color-bg-accent-subtle); border: var(--border-width) solid var(--color-border-accent); border-radius: var(--r); }
+.fd-space code, .fd-radii code { color: var(--color-text-secondary); }
+
+@media (max-width: 640px) {
+  .fd-type div { grid-template-columns: 1fr; gap: var(--space-1); }
+}

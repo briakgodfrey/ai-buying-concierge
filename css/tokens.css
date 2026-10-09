@@ -1,0 +1,168 @@
+/* AI Buying Concierge: design tokens
+   Mirrors the Figma variables one to one. Names match each variable's code syntax.
+   Layer 1 is primitives (raw values). Layer 2 is semantic tokens, which the
+   components use. Only layer 2 changes between light and dark. */
+
+:root {
+  /* Primitives: color */
+  --paper: #FBFAF7;
+  --white: #FFFFFF;
+
+  --ink-50: #F5F7F8;
+  --ink-100: #EDF0F2;
+  --ink-200: #DDE2E6;
+  --ink-300: #C1C9D0;
+  --ink-400: #97A3AE;
+  --ink-500: #6E7C8A;
+  --ink-600: #526273;
+  --ink-700: #384858;
+  --ink-800: #22303D;
+  --ink-900: #16202A;
+  --ink-950: #0E151C;
+
+  --pine-100: #DCF2EE;
+  --pine-300: #79CDBF;
+  --pine-500: #1A8F82;
+  --pine-600: #13756A;
+  --pine-700: #0F5E52;
+  --pine-950: #0E2A26;
+
+  --iris-100: #ECEAFF;
+  --iris-300: #B4ACFF;
+  --iris-700: #4A3FC2;
+  --iris-950: #252049;
+
+  --amber-100: #FFF1D6;
+  --amber-300: #F2C46B;
+  --amber-700: #8A5300;
+  --amber-950: #36280B;
+
+  --red-100: #FDE8E6;
+  --red-300: #F59A92;
+  --red-700: #B42318;
+  --red-950: #3B1513;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  /* Sizes */
+  --size-touch-min: 44px;
+  --size-control: 48px;
+  --size-dialog-max: 720px;
+  --border-width: 1px;
+  --border-width-focus: 2px;
+
+  /* Type */
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 40px;
+
+  /* Shadows (Figma effect styles) */
+  --shadow-card: 0 1px 2px rgba(14, 21, 28, 0.06), 0 4px 12px -2px rgba(14, 21, 28, 0.08);
+  --shadow-dialog: 0 2px 6px rgba(14, 21, 28, 0.08), 0 24px 48px -12px rgba(14, 21, 28, 0.24);
+}
+
+/* Semantic tokens: light (default) */
+:root,
+[data-theme="light"] {
+  --color-bg-canvas: var(--paper);
+  --color-bg-surface: var(--white);
+  --color-bg-subtle: var(--ink-50);
+  --color-bg-inverse: var(--ink-900);
+  --color-bg-accent: var(--pine-700);
+  --color-bg-accent-hover: var(--pine-600);
+  --color-bg-accent-subtle: var(--pine-100);
+  --color-bg-ai-subtle: var(--iris-100);
+  --color-bg-warning-subtle: var(--amber-100);
+  --color-bg-critical-subtle: var(--red-100);
+  --color-bg-hover: var(--ink-100);
+  --color-bg-disabled: var(--ink-100);
+  --color-bg-scrim: rgba(14, 21, 28, 0.48);
+
+  --color-text-primary: var(--ink-900);
+  --color-text-secondary: var(--ink-600);
+  --color-text-inverse: var(--white);
+  --color-text-on-accent: var(--white);
+  --color-text-accent: var(--pine-700);
+  --color-text-ai: var(--iris-700);
+  --color-text-warning: var(--amber-700);
+  --color-text-critical: var(--red-700);
+  --color-text-disabled: var(--ink-400);
+
+  --color-border-subtle: var(--ink-200);
+  --color-border-default: var(--ink-300);
+  --color-border-control: var(--ink-500);
+  --color-border-accent: var(--pine-600);
+  --color-border-focus: var(--iris-700);
+  --color-border-disabled: var(--ink-200);
+
+  --color-icon-primary: var(--ink-900);
+  --color-icon-secondary: var(--ink-600);
+  --color-icon-accent: var(--pine-700);
+
+  color-scheme: light;
+}
+
+/* Semantic tokens: dark */
+[data-theme="dark"] {
+  --color-bg-canvas: var(--ink-950);
+  --color-bg-surface: var(--ink-900);
+  --color-bg-subtle: var(--ink-800);
+  --color-bg-inverse: var(--ink-50);
+  --color-bg-accent: var(--pine-300);
+  --color-bg-accent-hover: var(--pine-100);
+  --color-bg-accent-subtle: var(--pine-950);
+  --color-bg-ai-subtle: var(--iris-950);
+  --color-bg-warning-subtle: var(--amber-950);
+  --color-bg-critical-subtle: var(--red-950);
+  --color-bg-hover: var(--ink-800);
+  --color-bg-disabled: var(--ink-800);
+  --color-bg-scrim: rgba(0, 0, 0, 0.64);
+
+  --color-text-primary: var(--ink-50);
+  --color-text-secondary: var(--ink-400);
+  --color-text-inverse: var(--ink-950);
+  --color-text-on-accent: var(--ink-950);
+  --color-text-accent: var(--pine-300);
+  --color-text-ai: var(--iris-300);
+  --color-text-warning: var(--amber-300);
+  --color-text-critical: var(--red-300);
+  --color-text-disabled: var(--ink-600);
+
+  --color-border-subtle: var(--ink-800);
+  --color-border-default: var(--ink-700);
+  --color-border-control: var(--ink-500);
+  --color-border-accent: var(--pine-300);
+  --color-border-focus: var(--iris-300);
+  --color-border-disabled: var(--ink-700);
+
+  --color-icon-primary: var(--ink-50);
+  --color-icon-secondary: var(--ink-400);
+  --color-icon-accent: var(--pine-300);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-dialog: 0 2px 6px rgba(0, 0, 0, 0.3), 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
