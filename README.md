@@ -8,7 +8,7 @@ A self-directed concept project. Not built for or affiliated with any company. T
 
 - [x] Product spec and wireframes
 - [x] Design tokens: color (light and dark), type, spacing, radius
-- [ ] Components
+- [x] Components: buttons, chips, answer options and recommendation cards, with every state
 - [ ] Question step, results, no match, and catalog unavailable screens
 
 ## How it's built
@@ -20,7 +20,9 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 | `css/tokens.css` | Design tokens as CSS variables. Primitives first, then semantic tokens for light and dark. These match the Figma variables one to one. |
 | `css/base.css` | Reset, one class per text style, focus ring, and the theme switch |
 | `js/theme.js` | Light and dark mode. Starts in your system theme and remembers your choice. |
+| `css/components.css` | Buttons, chips, answer options and the recommendation card, built only from tokens |
 | `foundations.html` | A live specimen of the tokens |
+| `components.html` | Every component and state, live and clickable |
 
 ## Design decisions
 
@@ -29,3 +31,5 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 - **Amber** flags budget gaps. Nothing uses alarm red for a catalog outage, because that isn't the buyer's error.
 - **Catalog facts** (specs, prices, stock) are set in Geist Mono, so real data never looks like generated text.
 - Every text color pair meets WCAG AA in both themes. Controls are at least 44px tall.
+- Answer options are real checkboxes, so keyboards and screen readers work without extra code. Selected never relies on color alone.
+- On each recommendation, catalog facts and the AI-written reason are labeled differently, so a buyer can always tell which is which.

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components: AI Buying Concierge</title>
+<meta name="description" content="Buttons, chips, answer options and recommendation cards for the AI Buying Concierge concept, with every state.">
+<script>try { var t = localStorage.getItem('theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { document.documentElement.dataset.theme = 'light'; }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/foundations.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="fd-header">
+  <nav class="fd-nav t-label-sm" aria-label="Design system">
+    <a href="foundations.html">Foundations</a>
+    <a href="components.html" aria-current="page">Components</a>
+  </nav>
+  <button class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span>Dark mode</span>
+  </button>
+</header>
+
+<main id="main" class="fd-main">
+  <section class="fd-intro" aria-labelledby="cp-title">
+    <p class="t-label-xs text-accent">COMPONENTS · v1</p>
+    <h1 id="cp-title" class="t-display">Components</h1>
+    <p class="t-body-lg text-secondary">Everything the concierge screens are built from. Each one uses only the design tokens, works in both themes, and shows every state. Hover, tab through and click them: they're real.</p>
+  </section>
+
+  <!-- Buttons -->
+  <section class="fd-section" aria-labelledby="btn-title">
+    <h2 id="btn-title" class="t-h2">Button</h2>
+    <p class="t-body-md text-secondary">Primary for the one main action on a screen. Secondary for alternatives. Ghost for low-emphasis links, like reaching a person. All 48px tall.</p>
+    <div class="fd-states" role="list">
+      <div role="listitem" class="fd-state-head"><span class="t-data-sm text-secondary">Default</span><span class="t-data-sm text-secondary">Hover</span><span class="t-data-sm text-secondary">Focus</span><span class="t-data-sm text-secondary">Disabled</span></div>
+      <div role="listitem" class="fd-state-row">
+        <button class="btn btn-primary" type="button">Add to cart</button>
+        <button class="btn btn-primary is-hover" type="button" tabindex="-1" aria-hidden="true">Add to cart</button>
+        <button class="btn btn-primary is-focus" type="button" tabindex="-1" aria-hidden="true">Add to cart</button>
+        <button class="btn btn-primary" type="button" disabled>Add to cart</button>
+      </div>
+      <div role="listitem" class="fd-state-row">
+        <button class="btn btn-secondary" type="button">Compare</button>
+        <button class="btn btn-secondary is-hover" type="button" tabindex="-1" aria-hidden="true">Compare</button>
+        <button class="btn btn-secondary is-focus" type="button" tabindex="-1" aria-hidden="true">Compare</button>
+        <button class="btn btn-secondary" type="button" disabled>Compare</button>
+      </div>
+      <div role="listitem" class="fd-state-row">
+        <button class="btn btn-ghost" type="button">Talk to a sales rep</button>
+        <button class="btn btn-ghost is-hover" type="button" tabindex="-1" aria-hidden="true">Talk to a sales rep</button>
+        <button class="btn btn-ghost is-focus" type="button" tabindex="-1" aria-hidden="true">Talk to a sales rep</button>
+        <button class="btn btn-ghost" type="button" disabled>Talk to a sales rep</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chips -->
+  <section class="fd-section" aria-labelledby="chip-title">
+    <h2 id="chip-title" class="t-h2">Chip</h2>
+    <p class="t-body-md text-secondary">Neutral for the buyer's saved answers. AI for anything AI-assisted. Accent for Best fit. Warning for budget gaps.</p>
+    <div class="fd-row">
+      <span class="chip chip-neutral">Laptops: 25</span>
+      <span class="chip chip-ai">AI-assisted</span>
+      <span class="chip chip-accent">Best fit for your team</span>
+      <span class="chip chip-warning">$289 over budget</span>
+    </div>
+  </section>
+
+  <!-- Answer options -->
+  <section class="fd-section" aria-labelledby="opt-title">
+    <h2 id="opt-title" class="t-h2">Answer option</h2>
+    <p class="t-body-md text-secondary">One answer in a question step, built on a real checkbox. Selected changes the fill, border, checkbox and text weight, so it never relies on color alone.</p>
+    <div class="fd-split">
+      <fieldset class="option-group">
+        <legend class="t-label-sm fd-legend">Try it: what will your team mostly use these laptops for?</legend>
+        <label class="option"><input class="option-input" type="checkbox" name="use" value="office" checked><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Email, documents and video calls</span></label>
+        <label class="option"><input class="option-input" type="checkbox" name="use" value="data"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Spreadsheets and data analysis</span></label>
+        <label class="option"><input class="option-input" type="checkbox" name="use" value="design"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Design, photo or video editing</span></label>
+      </fieldset>
+      <div class="option-group" aria-label="Option states">
+        <p class="t-label-sm fd-legend">States</p>
+        <span class="option is-hover" aria-hidden="true"><span class="option-box"></span><span class="option-label">Hover</span></span>
+        <span class="option is-focus" aria-hidden="true"><span class="option-box"></span><span class="option-label">Focus</span></span>
+        <label class="option" aria-hidden="true"><input class="option-input" type="checkbox" disabled tabindex="-1"><span class="option-box"></span><span class="option-label">Disabled</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendation cards -->
+  <section class="fd-section" aria-labelledby="rec-title">
+    <h2 id="rec-title" class="t-h2">Recommendation card</h2>
+    <p class="t-body-md text-secondary">Specs and price come from the catalog, so they're set in mono and labeled. The reason is AI-written, so it's labeled in iris. Every card names a tradeoff, and Best fit goes to the right match, not the priciest one.</p>
+    <div class="fd-cards">
+      <article class="rec-card" aria-labelledby="rec-good">
+        <div class="rec-top"><span class="rec-tier t-label-xs">GOOD</span></div>
+        <h3 id="rec-good" class="t-h3">Light and affordable for everyday work</h3>
+        <ul class="rec-specs t-data-md"><li>8 GB memory</li><li>256 GB SSD</li><li>14 in display, 2.9 lb</li></ul>
+        <div class="rec-price"><p class="t-data-price">$749 each</p><p class="rec-source t-data-sm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.2 2.2L9.5 3.6"/></svg>Price and stock from the catalog</p></div>
+        <div class="rec-why"><p class="rec-why-label t-label-xs">WHY · AI-ASSISTED</p><p class="t-body-sm">Covers email, documents and video calls at the lowest cost.</p></div>
+        <p class="rec-tradeoff t-body-sm">Tradeoff: 8 GB can slow down with large spreadsheets.</p>
+        <div class="rec-actions"><button class="btn btn-primary" type="button">Add 25 to cart</button><button class="btn btn-secondary" type="button">Compare</button></div>
+      </article>
+      <article class="rec-card is-best-fit" aria-labelledby="rec-better">
+        <div class="rec-top"><span class="rec-tier t-label-xs">BETTER</span><span class="chip chip-accent">Best fit for your team</span></div>
+        <h3 id="rec-better" class="t-h3">Balanced for calls and spreadsheets</h3>
+        <ul class="rec-specs t-data-md"><li>16 GB memory</li><li>512 GB SSD</li><li>14 in display, 3.1 lb</li></ul>
+        <div class="rec-price"><p class="t-data-price">$1,049 each</p><p class="rec-source t-data-sm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.2 2.2L9.5 3.6"/></svg>Price and stock from the catalog</p></div>
+        <div class="rec-why"><p class="rec-why-label t-label-xs">WHY · AI-ASSISTED</p><p class="t-body-sm">Handles video calls and large spreadsheets without slowing down, and stays within your budget.</p></div>
+        <p class="rec-tradeoff t-body-sm">Tradeoff: heavier than the Good pick, so less ideal for frequent travel.</p>
+        <div class="rec-actions"><button class="btn btn-primary" type="button">Add 25 to cart</button><button class="btn btn-secondary" type="button">Compare</button></div>
+      </article>
+      <article class="rec-card" aria-labelledby="rec-best">
+        <div class="rec-top"><span class="rec-tier t-label-xs">BEST</span><span class="chip chip-warning">$289 over budget</span></div>
+        <h3 id="rec-best" class="t-h3">Most headroom for heavy work</h3>
+        <ul class="rec-specs t-data-md"><li>32 GB memory</li><li>1 TB SSD</li><li>16 in display, 4.2 lb</li></ul>
+        <div class="rec-price"><p class="t-data-price">$1,489 each</p><p class="rec-source t-data-sm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.2 2.2L9.5 3.6"/></svg>Price and stock from the catalog</p></div>
+        <div class="rec-why"><p class="rec-why-label t-label-xs">WHY · AI-ASSISTED</p><p class="t-body-sm">Room for data analysis and design work for years to come.</p></div>
+        <p class="rec-tradeoff t-body-sm">Tradeoff: more than documents and calls need, and the heaviest of the three.</p>
+        <div class="rec-actions"><button class="btn btn-primary" type="button">Add 25 to cart</button><button class="btn btn-secondary" type="button">Compare</button></div>
+      </article>
+    </div>
+  </section>
+</main>
+<script src="js/theme.js" defer></script>
+</body>
+</html>

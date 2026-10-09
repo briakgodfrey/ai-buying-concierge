@@ -1,0 +1,114 @@
+/* AI Buying Concierge: components
+   Buttons, chips, answer options and the recommendation card. Every value comes
+   from tokens.css. The .is-hover and .is-focus classes only exist so the
+   components page can show those states side by side; real use relies on
+   :hover and :focus-visible. */
+
+/* Button */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--size-control); padding: 0 var(--space-5);
+  border: var(--border-width) solid transparent; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: var(--font-size-md); line-height: 20px; font-weight: 500;
+  text-decoration: none; cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn:focus-visible, .btn.is-focus { outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px; }
+.btn:disabled { cursor: not-allowed; }
+
+.btn-primary { background: var(--color-bg-accent); color: var(--color-text-on-accent); }
+.btn-primary:hover:not(:disabled), .btn-primary.is-hover { background: var(--color-bg-accent-hover); }
+
+.btn-secondary { background: var(--color-bg-surface); color: var(--color-text-primary); border-color: var(--color-border-control); }
+.btn-secondary:hover:not(:disabled), .btn-secondary.is-hover { background: var(--color-bg-hover); }
+
+.btn-ghost { background: transparent; color: var(--color-text-accent); }
+.btn-ghost:hover:not(:disabled), .btn-ghost.is-hover { background: var(--color-bg-hover); }
+
+.btn:disabled { background: var(--color-bg-disabled); color: var(--color-text-disabled); border-color: var(--color-border-disabled); }
+.btn-ghost:disabled { background: transparent; border-color: transparent; }
+
+/* Chip: short labels. The words carry the meaning, never the color alone. */
+
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+  font-size: var(--font-size-xs); line-height: 16px; font-weight: 600; letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.chip-neutral { background: var(--color-bg-subtle); color: var(--color-text-secondary); }
+.chip-ai { background: var(--color-bg-ai-subtle); color: var(--color-text-ai); }
+.chip-accent { background: var(--color-bg-accent-subtle); color: var(--color-text-accent); }
+.chip-warning { background: var(--color-bg-warning-subtle); color: var(--color-text-warning); }
+
+/* Answer option: a real checkbox, styled. The whole row is the click target. */
+
+.option {
+  display: flex; align-items: center; gap: var(--space-3);
+  min-height: 56px; padding: var(--space-4);
+  background: var(--color-bg-surface); color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-border-default); border-radius: var(--radius-md);
+  cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.option:hover, .option.is-hover { background: var(--color-bg-hover); }
+
+.option-input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+
+.option-box {
+  flex: none; display: grid; place-items: center; width: 20px; height: 20px;
+  border: 1.5px solid var(--color-border-control); border-radius: 4px;
+  background: var(--color-bg-surface); color: var(--color-text-on-accent);
+}
+.option-box svg { width: 14px; height: 14px; opacity: 0; }
+
+.option-label { font-size: var(--font-size-md); line-height: 24px; }
+
+/* Selected: fill, 2px border, filled checkbox and heavier text, so it never depends on color alone */
+.option:has(.option-input:checked) {
+  background: var(--color-bg-accent-subtle); border-color: var(--color-border-accent);
+  box-shadow: inset 0 0 0 1px var(--color-border-accent);
+}
+.option:has(.option-input:checked) .option-box { background: var(--color-bg-accent); border-color: var(--color-bg-accent); }
+.option:has(.option-input:checked) .option-box svg { opacity: 1; }
+.option:has(.option-input:checked) .option-label { font-weight: 500; }
+
+.option:has(.option-input:focus-visible), .option.is-focus {
+  outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px;
+}
+
+.option:has(.option-input:disabled) {
+  background: var(--color-bg-disabled); color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled); cursor: not-allowed;
+}
+.option:has(.option-input:disabled) .option-box { background: var(--color-bg-disabled); border-color: var(--color-border-disabled); }
+
+.option-group { border: 0; margin: 0; padding: 0; display: grid; gap: var(--space-3); min-width: 0; }
+
+/* Recommendation card */
+
+.rec-card {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-6); min-width: 0;
+  background: var(--color-bg-surface); color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-border-default); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+.rec-card.is-best-fit { border-color: var(--color-border-accent); box-shadow: inset 0 0 0 1px var(--color-border-accent), var(--shadow-card); }
+
+.rec-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: 24px; }
+.rec-tier { color: var(--color-text-secondary); }
+
+.rec-specs { list-style: none; margin: 0; padding: 0; color: var(--color-text-secondary); }
+
+.rec-price { display: grid; gap: 2px; }
+.rec-source { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--color-text-accent); }
+.rec-source svg { width: 12px; height: 12px; flex: none; }
+
+.rec-why { display: grid; gap: var(--space-1); }
+.rec-why-label { color: var(--color-text-ai); }
+
+.rec-tradeoff { color: var(--color-text-secondary); }
+
+.rec-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: auto; padding-top: var(--space-2); }
+.rec-actions .btn-primary { flex: 1 1 auto; }

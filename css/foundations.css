@@ -52,3 +52,28 @@
 @media (max-width: 640px) {
   .fd-type div { grid-template-columns: 1fr; gap: var(--space-1); }
 }
+
+/* Docs pages: navigation and component showcase layouts */
+
+.fd-nav { display: flex; gap: var(--space-1); }
+.fd-nav a {
+  display: inline-flex; align-items: center; min-height: var(--size-touch-min); padding: 0 var(--space-3);
+  border-radius: var(--radius-full); color: var(--color-text-secondary); text-decoration: none;
+}
+.fd-nav a:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+.fd-nav a[aria-current="page"] { background: var(--color-bg-accent-subtle); color: var(--color-text-accent); }
+
+.fd-states { display: grid; gap: var(--space-4); overflow-x: auto; padding: var(--space-1); }
+.fd-state-head, .fd-state-row { display: grid; grid-template-columns: repeat(4, minmax(170px, 1fr)); gap: var(--space-4); align-items: center; justify-items: start; }
+
+.fd-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+.fd-split { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-8); align-items: start; }
+.fd-legend { margin-bottom: var(--space-1); padding: 0; color: var(--color-text-secondary); }
+
+.fd-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); align-items: stretch; }
+
+@media (max-width: 960px) {
+  .fd-cards { grid-template-columns: 1fr; max-width: 420px; }
+  .fd-split { grid-template-columns: 1fr; }
+}
