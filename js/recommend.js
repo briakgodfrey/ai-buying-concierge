@@ -125,7 +125,68 @@ function tradeoffFor(item, picks, n, budgetMax, perUnit) {
   return 'The fewest extras of the three.';
 }
 
-function recommend(answers, catalog, today = new Date()) {
+const BUDGET_ORDER = ['Under $800', '$800 to $1,200', '$1,200 to $1,800', 'Over $1,800'];
+const BUDGET_UPPER = { 'Under $800': '$800', '$800 to $1,200': '$1,200', '$1,200 to $1,800': '$1,800' };
+const EXTRA_SHORT = {
+  'Windows 11 Pro for IT management': 'Windows 11 Pro',
+  'Larger 15 to 16 inch screen': 'a larger screen',
+  'Touch screen': 'a touch screen',
+  'All-day battery': 'all-day battery'
+};
+
+// When nothing fits, try small changes to the answers and keep the ones that work
+function fixesFor(answers, catalog, today, closest) {
+  const fixes = [];
+  const preview = (r) => {
+    const low = Math.min(...r.picks.map((p) => p.order.perUnit));
+    return `Shows ${r.picks.length} ${r.picks.length === 1 ? 'pick' : 'picks'} from $${Math.round(low).toLocaleString('en-US')} per laptop`;
+  };
+
+  if (closest) {
+    const target = BUDGET_ORDER.find((b) => closest.order.perUnit <= BUDGET_MAX[b]);
+    if (target && target !== answers.budget) {
+      const r = recommend({ ...answers, budget: target }, catalog, today, { noFixes: true });
+      if (r.status === 'ok') {
+        fixes.push({
+          change: { budget: target },
+          label: BUDGET_UPPER[target] ? `Raise the budget to ${BUDGET_UPPER[target]} per laptop` : 'Allow more than $1,800 per laptop',
+          detail: preview(r)
+        });
+      }
+    }
+  }
+
+  for (const extra of answers.extras) {
+    const r = recommend({ ...answers, extras: answers.extras.filter((e) => e !== extra) }, catalog, today, { noFixes: true });
+    if (r.status === 'ok') fixes.push({ change: { removeExtra: extra }, label: `Go without ${EXTRA_SHORT[extra] || extra}`, detail: preview(r) });
+  }
+
+  const creative = 'Design, photo or video editing';
+  if (answers.use.includes(creative)) {
+    const rest = answers.use.filter((u) => u !== creative);
+    const r = recommend({ ...answers, use: rest.length ? rest : ['Email, documents and video calls'] }, catalog, today, { noFixes: true });
+    if (r.status === 'ok') fixes.push({ change: { removeUse: creative }, label: 'Plan without photo and video work', detail: `${preview(r)}. Creative staff could get a separate order.` });
+  }
+
+  return fixes.slice(0, 3);
+}
+
+function noMatchCopy(answers, n, closest) {
+  const why = [];
+  if (n.creative) why.push('Photo and video work needs 32 GB of memory and dedicated graphics.');
+  else if (n.heavy) why.push('Spreadsheets and development need at least 16 GB of memory.');
+  const must = answers.extras.map((e) => EXTRA_SHORT[e] || e);
+  if (must.length) why.push(`Your must-haves (${must.join(', ')}) narrow the options further.`);
+
+  if (!closest) {
+    return { title: 'No laptop here meets every must-have', why: why.concat('No model in this catalog has all of them at once.').join(' ') };
+  }
+  const budget = answers.budget === 'Under $800' ? 'under $800' : `up to ${BUDGET_UPPER[answers.budget]}`;
+  why.push(`The lowest-priced laptop that meets all of that is ${closest.item.name}, at $${Math.round(closest.order.perUnit).toLocaleString('en-US')} per laptop.`);
+  return { title: `Nothing fits ${budget} per laptop`, why: why.join(' ') };
+}
+
+function recommend(answers, catalog, today = new Date(), opts = {}) {
   const n = needsFrom(answers);
   const qty = answers.qty;
   const budgetMax = BUDGET_MAX[answers.budget] ?? Infinity;
@@ -136,7 +197,25 @@ function recommend(answers, catalog, today = new Date()) {
   const inBudget = candidates.filter((c) => c.order.perUnit <= budgetMax);
   if (!inBudget.length) {
     const closest = candidates.slice().sort((a, b) => a.order.perUnit - b.order.perUnit)[0] || null;
-    return { status: 'no-match', needs: n, budgetMax, closest };
+    if (opts.noFixes) return { status: 'no-match' };
+    const gapEach = closest ? closest.order.perUnit - budgetMax : 0;
+    return {
+      status: 'no-match',
+      needs: n,
+      budgetMax,
+      copy: noMatchCopy(answers, n, closest),
+      closest: closest && {
+        tier: 'Closest option',
+        item: closest.item,
+        order: closest.order,
+        stock: stockFor(closest.item, qty, today),
+        bestFit: false,
+        overBudget: true,
+        reason: reasonFor(closest.item, n, false),
+        tradeoff: `Over your budget by about $${Math.round(gapEach).toLocaleString('en-US')} per laptop, or $${Math.round(gapEach * qty).toLocaleString('en-US')} for all ${qty}.`
+      },
+      fixes: fixesFor(answers, catalog, today, closest)
+    };
   }
 
   const byPrice = (a, b) => a.order.perUnit - b.order.perUnit;

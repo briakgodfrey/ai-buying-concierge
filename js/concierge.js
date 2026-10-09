@@ -56,7 +56,7 @@ if (dialog && opener) {
       nextBtn.textContent = step === TOTAL ? 'Show my picks' : 'Next';
     }
 
-    dialog.classList.toggle('is-wide', step === 'results');
+    dialog.classList.toggle('is-wide', step === 'results' || step === 'nomatch');
     renderAnswers();
 
     const heading = dialog.querySelector(`.cg-step[data-step="${step}"] h3`);
@@ -153,8 +153,41 @@ if (dialog && opener) {
     }
     if (step < TOTAL) { showStep(step + 1); return; }
 
+    search(false);
+  }
+
+  // Looks up picks. Any failure, including a catalog outage, shows the
+  // "can't confirm" screen instead of guessing.
+  const outageToggle = document.getElementById('simulate-outage');
+  function search(isRetry) {
     showStep('loading');
-    setTimeout(() => { if (step === 'loading') showResults(); }, LOADING_MS);
+    setTimeout(() => {
+      if (step !== 'loading') return;
+      try {
+        if (outageToggle && outageToggle.checked && !isRetry) throw new Error('Catalog unavailable');
+        showResults();
+      } catch (err) {
+        showStep('unavailable');
+      }
+    }, LOADING_MS);
+  }
+
+  // Applies one of the "ways to close the gap" and searches again
+  function applyFix(change) {
+    if (change.budget) {
+      state.budget = change.budget;
+      dialog.querySelectorAll('input[name="budget"]').forEach((i) => { i.checked = i.value === change.budget; });
+    }
+    if (change.removeExtra) {
+      state.extras = state.extras.filter((e) => e !== change.removeExtra);
+      dialog.querySelectorAll('input[name="extras"]').forEach((i) => { if (i.value === change.removeExtra) i.checked = false; });
+    }
+    if (change.removeUse) {
+      state.use = state.use.filter((u) => u !== change.removeUse);
+      if (!state.use.length) state.use = ['Email, documents and video calls'];
+      dialog.querySelectorAll('input[name="use"]').forEach((i) => { i.checked = state.use.includes(i.value); });
+    }
+    search(false);
   }
 
   // ---------- Results ----------
@@ -245,16 +278,37 @@ if (dialog && opener) {
     return article;
   }
 
+  let currentFixes = [];
+
+  function showNoMatch(result) {
+    $('#qn-title').textContent = result.copy.title;
+    $('[data-region="nomatch-why"]').textContent = result.copy.why;
+    $('[data-region="nomatch-card"]').replaceChildren(...(result.closest ? [card(result.closest, state.qty, 'closest')] : []));
+    $('[data-region="nomatch-cart"]').textContent = '';
+
+    currentFixes = result.fixes;
+    const items = result.fixes.map((fix, i) => {
+      const li = el('li', 'cg-fix');
+      const btn = el('button', 'btn btn-secondary', fix.label);
+      btn.type = 'button';
+      btn.dataset.fix = String(i);
+      li.append(btn, el('p', 't-body-sm text-secondary', fix.detail));
+      return li;
+    });
+    const rep = el('li', 'cg-fix');
+    const repBtn = el('button', 'btn btn-secondary', result.closest ? 'Ask a sales rep about volume pricing' : 'Ask a sales rep about other options');
+    repBtn.type = 'button';
+    repBtn.dataset.action = 'rep';
+    rep.append(repBtn, el('p', 't-body-sm text-secondary', result.closest
+      ? 'Larger orders can sometimes be priced lower. Your answers go with the request.'
+      : 'A rep can check models beyond this catalog. Your answers go with the request.'));
+    $('[data-region="fixes"]').replaceChildren(...items, rep);
+    showStep('nomatch');
+  }
+
   function showResults() {
     const result = recommend(state, CATALOG);
-    if (result.status === 'no-match') {
-      const c = result.closest;
-      $('[data-region="nomatch-text"]').textContent = c
-        ? `The closest option is ${c.item.name} at ${money(c.order.perUnit)} per laptop. A full "no match" screen, with ways to close the gap, is the next piece of this build.`
-        : 'No laptop in this demo catalog meets every must-have. A full "no match" screen is the next piece of this build.';
-      showStep('nomatch');
-      return;
-    }
+    if (result.status === 'no-match') { showNoMatch(result); return; }
     const picks = result.picks;
     $('#qres-title').textContent = `${picks.length} ${picks.length === 1 ? 'pick' : 'picks'} for ${state.qty} ${state.qty === 1 ? 'laptop' : 'laptops'}`;
     $('[data-region="picks"]').replaceChildren(...picks.map((p, i) => card(p, state.qty, i)));
@@ -285,8 +339,12 @@ if (dialog && opener) {
     if (action === 'edit') showStep(1);
     if (target.dataset.goto) showStep(Number(target.dataset.goto));
 
+    if (action === 'retry') search(true);
+    if (target.dataset.fix) applyFix(currentFixes[Number(target.dataset.fix)].change);
+
     if (target.dataset.cart) {
-      $('[data-region="cart"]').textContent = `Added ${state.qty} × ${target.dataset.cart} to your cart. This is a demo, so nothing is ordered.`;
+      const region = step === 'nomatch' ? '[data-region="nomatch-cart"]' : '[data-region="cart"]';
+      $(region).textContent = `Added ${state.qty} × ${target.dataset.cart} to your cart. This is a demo, so nothing is ordered.`;
     }
     if (target.dataset.compare) {
       const on = target.getAttribute('aria-pressed') !== 'true';
