@@ -141,10 +141,34 @@
         <p class="t-body-md text-secondary">Matching your answers to live prices and stock for every laptop you need.</p>
       </section>
 
-      <!-- Placeholder until the results screen is built -->
-      <section class="cg-step cg-status" data-step="done" aria-labelledby="qd-title" hidden>
-        <h3 id="qd-title" class="t-h2" tabindex="-1">Your answers are saved</h3>
-        <p class="t-body-md text-secondary">The results screen is the next piece of this build. Your three picks will appear here, with prices for the whole order.</p>
+      <!-- Results -->
+      <section class="cg-step cg-results" data-step="results" aria-labelledby="qres-title" hidden>
+        <div class="cg-results-head">
+          <h3 id="qres-title" class="t-h2" tabindex="-1">3 picks for your team</h3>
+          <button class="btn btn-secondary" type="button" data-action="edit">Change answers</button>
+        </div>
+        <p class="t-body-sm text-secondary">Specs, prices and stock come straight from the catalog. Only the "why" lines are AI-assisted.</p>
+        <div class="cg-picks" data-region="picks"></div>
+        <p class="cg-cart-status t-body-sm" data-region="cart" aria-live="polite"></p>
+        <div class="cg-feedback" role="group" aria-labelledby="fb-q">
+          <p id="fb-q" class="t-label-md">Were these picks helpful?</p>
+          <div class="cg-feedback-buttons">
+            <button class="btn btn-secondary" type="button" data-feedback="yes" aria-pressed="false">Yes</button>
+            <button class="btn btn-secondary" type="button" data-feedback="no" aria-pressed="false">No</button>
+          </div>
+          <p class="t-body-sm text-secondary" data-region="feedback" aria-live="polite"></p>
+        </div>
+        <div class="cg-results-foot">
+          <button class="btn btn-ghost" type="button" data-action="rep">Talk to a sales rep</button>
+          <p class="t-data-sm text-secondary">Demo note: the catalog is invented, and simple rules stand in for the AI model.</p>
+        </div>
+      </section>
+
+      <!-- Nothing fits (full screen comes in the next piece) -->
+      <section class="cg-step cg-status" data-step="nomatch" aria-labelledby="qn-title" hidden>
+        <h3 id="qn-title" class="t-h2" tabindex="-1">Nothing fits that budget yet</h3>
+        <p class="t-body-md text-secondary" data-region="nomatch-text"></p>
+        <button class="btn btn-secondary" type="button" data-action="edit">Change answers</button>
       </section>
 
       <!-- Talk to a sales rep -->
@@ -166,6 +190,8 @@
 </dialog>
 
 <script src="js/theme.js" defer></script>
+<script src="js/catalog.js" defer></script>
+<script src="js/recommend.js" defer></script>
 <script src="js/concierge.js" defer></script>
 </body>
 </html>

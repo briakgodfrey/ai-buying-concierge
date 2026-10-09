@@ -56,6 +56,7 @@ if (dialog && opener) {
       nextBtn.textContent = step === TOTAL ? 'Show my picks' : 'Next';
     }
 
+    dialog.classList.toggle('is-wide', step === 'results');
     renderAnswers();
 
     const heading = dialog.querySelector(`.cg-step[data-step="${step}"] h3`);
@@ -153,7 +154,114 @@ if (dialog && opener) {
     if (step < TOTAL) { showStep(step + 1); return; }
 
     showStep('loading');
-    setTimeout(() => { if (step === 'loading') showStep('done'); }, LOADING_MS);
+    setTimeout(() => { if (step === 'loading') showResults(); }, LOADING_MS);
+  }
+
+  // ---------- Results ----------
+
+  const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+  const day = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const CHECK = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.2 2.2L9.5 3.6"/></svg>';
+  const TRUCK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 4h8v6.5h-8zM9.5 6.5h3l2 2v2h-5"/><circle cx="4" cy="11.5" r="1.3"/><circle cx="12" cy="11.5" r="1.3"/></svg>';
+
+  // Small helper so every catalog value goes in as text, never as HTML
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function stockLine(stock) {
+    const p = el('p', 'rec-stock t-data-sm');
+    p.insertAdjacentHTML('afterbegin', TRUCK);
+    let text;
+    if (stock.all) text = `All ${stock.ready} ship by ${day(stock.readyBy)}`;
+    else {
+      text = `${stock.ready} ship by ${day(stock.readyBy)}`;
+      if (stock.later) text += `, ${stock.later} more by ${day(stock.laterBy)}`;
+      if (stock.short) text += `. A rep can source the other ${stock.short}`;
+    }
+    p.append(document.createTextNode(text));
+    if (!stock.all) p.classList.add('is-partial');
+    return p;
+  }
+
+  function card(pick, qty, index) {
+    const { item, order } = pick;
+    const id = `pick-${index}`;
+    const article = el('article', 'rec-card' + (pick.bestFit ? ' is-best-fit' : ''));
+    article.setAttribute('aria-labelledby', id);
+
+    const top = el('div', 'rec-top');
+    top.append(el('span', 'rec-tier t-label-xs', pick.tier.toUpperCase()));
+    const flags = el('div', 'rec-flags');
+    if (pick.bestFit) flags.append(el('span', 'chip chip-accent', 'Best fit for your team'));
+    if (pick.overBudget) flags.append(el('span', 'chip chip-warning', 'Over budget'));
+    top.append(flags);
+
+    const title = el('h4', 't-h3', item.name);
+    title.id = id;
+
+    const specs = el('ul', 'rec-specs t-data-md');
+    specs.append(
+      el('li', '', `${item.memory} GB memory`),
+      el('li', '', `${item.storage >= 1024 ? '1 TB' : item.storage + ' GB'} storage`),
+      el('li', '', `${item.screen} in, ${item.weight} lb, ${item.battery} hr battery`)
+    );
+
+    const price = el('div', 'rec-price');
+    price.append(el('p', 't-data-price', `${money(item.price)} each`));
+    if (item.promo) {
+      const covers = order.fullUnits === 0
+        ? `Promo price ${money(item.promo.price)} applies to all ${qty}`
+        : `Promo price ${money(item.promo.price)} covers ${order.promoUnits} of ${qty}`;
+      price.append(el('p', 'rec-promo t-data-sm', covers));
+    }
+    price.append(el('p', 'rec-total t-label-md', `Total for ${qty}: ${money(order.total)}`));
+    if (order.promoUnits && order.fullUnits) {
+      price.append(el('p', 't-data-sm text-secondary', `${order.promoUnits} × ${money(item.promo.price)} + ${order.fullUnits} × ${money(item.price)}`));
+    }
+    const source = el('p', 'rec-source t-data-sm');
+    source.insertAdjacentHTML('afterbegin', CHECK);
+    source.append(document.createTextNode('Price and stock from the catalog'));
+    price.append(source);
+
+    const why = el('div', 'rec-why');
+    why.append(el('p', 'rec-why-label t-label-xs', 'WHY · AI-ASSISTED'), el('p', 't-body-sm', pick.reason));
+
+    const actions = el('div', 'rec-actions');
+    const add = el('button', 'btn btn-primary', `Add ${qty} to cart`);
+    add.type = 'button';
+    add.dataset.cart = item.name;
+    const compare = el('button', 'btn btn-secondary', 'Compare');
+    compare.type = 'button';
+    compare.dataset.compare = item.id;
+    compare.setAttribute('aria-pressed', 'false');
+    compare.setAttribute('aria-label', `Compare ${item.name}`);
+    actions.append(add, compare);
+
+    article.append(top, title, specs, price, stockLine(pick.stock), why, el('p', 'rec-tradeoff t-body-sm', `Tradeoff: ${pick.tradeoff.charAt(0).toLowerCase()}${pick.tradeoff.slice(1)}`), actions);
+    return article;
+  }
+
+  function showResults() {
+    const result = recommend(state, CATALOG);
+    if (result.status === 'no-match') {
+      const c = result.closest;
+      $('[data-region="nomatch-text"]').textContent = c
+        ? `The closest option is ${c.item.name} at ${money(c.order.perUnit)} per laptop. A full "no match" screen, with ways to close the gap, is the next piece of this build.`
+        : 'No laptop in this demo catalog meets every must-have. A full "no match" screen is the next piece of this build.';
+      showStep('nomatch');
+      return;
+    }
+    const picks = result.picks;
+    $('#qres-title').textContent = `${picks.length} ${picks.length === 1 ? 'pick' : 'picks'} for ${state.qty} ${state.qty === 1 ? 'laptop' : 'laptops'}`;
+    $('[data-region="picks"]').replaceChildren(...picks.map((p, i) => card(p, state.qty, i)));
+    $('[data-region="cart"]').textContent = '';
+    $('[data-region="feedback"]').textContent = '';
+    dialog.querySelectorAll('[data-feedback]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    showStep('results');
   }
 
   opener.addEventListener('click', openConcierge);
@@ -174,7 +282,22 @@ if (dialog && opener) {
     if (action === 'rep') { returnStep = step; showStep('rep'); }
     if (action === 'resume') showStep(returnStep);
 
+    if (action === 'edit') showStep(1);
     if (target.dataset.goto) showStep(Number(target.dataset.goto));
+
+    if (target.dataset.cart) {
+      $('[data-region="cart"]').textContent = `Added ${state.qty} × ${target.dataset.cart} to your cart. This is a demo, so nothing is ordered.`;
+    }
+    if (target.dataset.compare) {
+      const on = target.getAttribute('aria-pressed') !== 'true';
+      target.setAttribute('aria-pressed', String(on));
+    }
+    if (target.dataset.feedback) {
+      dialog.querySelectorAll('[data-feedback]').forEach((b) => b.setAttribute('aria-pressed', String(b === target)));
+      $('[data-region="feedback"]').textContent = target.dataset.feedback === 'yes'
+        ? 'Thanks. This helps us keep the picks accurate.'
+        : 'Thanks for telling us. Every "No" is reviewed, and a sales rep can help find a better fit.';
+    }
 
     if (target.dataset.qty) {
       const current = Number(qtyInput.value) || 0;

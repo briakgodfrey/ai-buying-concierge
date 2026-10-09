@@ -10,7 +10,8 @@ A self-directed concept project. Not built for or affiliated with any company. T
 - [x] Design tokens: color (light and dark), type, spacing, radius
 - [x] Components: buttons, chips, answer options and recommendation cards, with every state
 - [x] Question step: five plain questions in an accessible dialog, starting with quantity
-- [ ] Results, no match, and catalog unavailable screens
+- [x] Results: Good, Better and Best picks with team totals, promo limits and stock for the full quantity
+- [ ] No match and catalog unavailable screens
 
 ## How it's built
 
@@ -24,7 +25,9 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 | `css/components.css` | Buttons, chips, answer options and the recommendation card, built only from tokens |
 | `foundations.html` | A live specimen of the tokens |
 | `components.html` | Every component and state, live and clickable |
-| `demo.html`, `css/concierge.css`, `js/concierge.js` | The concierge itself: a demo store page and the question flow |
+| `demo.html`, `css/concierge.css`, `js/concierge.js` | The concierge itself: a demo store page, the question flow and the results |
+| `js/catalog.js` | A small invented catalog. The only source of specs, prices and stock |
+| `js/recommend.js` | Turns answers into picks. Simple rules stand in for the AI model, so the logic is easy to read |
 
 ## Design decisions
 
@@ -36,4 +39,7 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 - Answer options are real checkboxes, so keyboards and screen readers work without extra code. Selected never relies on color alone.
 - Questions come one at a time in a native dialog, so focus stays inside, Escape closes it, and focus returns to the button. Answers are kept if the buyer closes it, and each answer chip jumps back to that question.
 - Quantity is the first question, so every price can be shown for the whole order.
+- Every price is shown for the whole order. If a promo only covers some units, the card says how many and shows the math.
+- Stock is checked for the full quantity, so "in stock" means every laptop can ship, with dates.
+- Best fit goes to the best match within budget, never the most expensive pick. Anything over budget is flagged.
 - On each recommendation, catalog facts and the AI-written reason are labeled differently, so a buyer can always tell which is which.
