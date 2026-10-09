@@ -64,6 +64,11 @@
 
 .option-label { font-size: var(--font-size-md); line-height: 24px; }
 
+/* Radio variant: round box with a dot instead of a check */
+.option-box-radio { border-radius: 50%; }
+.option-box-radio::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0; }
+.option:has(.option-input:checked) .option-box-radio::after { opacity: 1; }
+
 /* Selected: fill, 2px border, filled checkbox and heavier text, so it never depends on color alone */
 .option:has(.option-input:checked) {
   background: var(--color-bg-accent-subtle); border-color: var(--color-border-accent);

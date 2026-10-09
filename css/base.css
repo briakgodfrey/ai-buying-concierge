@@ -17,6 +17,8 @@ body {
 
 img, svg { display: block; max-width: 100%; }
 
+[hidden] { display: none !important; }
+
 h1, h2, h3, p { margin: 0; }
 
 button { font: inherit; color: inherit; }

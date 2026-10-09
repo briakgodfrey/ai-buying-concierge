@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo: AI Buying Concierge</title>
+<meta name="description" content="Try the AI Buying Concierge concept: five plain questions to help a small business choose laptops.">
+<script>try { var t = localStorage.getItem('theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { document.documentElement.dataset.theme = 'light'; }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/concierge.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<p class="demo-banner t-body-sm">Concept demo. Not a real store, and nothing is sent anywhere. <a href="index.html">About this project</a></p>
+
+<header class="store-header">
+  <span class="store-name t-label-md">Business store</span>
+  <button class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span>Dark mode</span>
+  </button>
+</header>
+
+<main id="main" class="store-main">
+  <h1 class="t-h1">Business laptops</h1>
+  <p class="t-body-md text-secondary">48 models for teams of every size.</p>
+
+  <section class="store-helper" aria-labelledby="helper-title">
+    <div>
+      <h2 id="helper-title" class="t-h3">Not sure which to choose?</h2>
+      <p class="t-body-md text-secondary">Answer five quick questions about your team. You'll get three picks with prices for the whole order, checked against the catalog.</p>
+    </div>
+    <button class="btn btn-primary" type="button" id="open-concierge" aria-haspopup="dialog">Help me choose</button>
+  </section>
+
+  <div class="store-grid" aria-hidden="true">
+    <div class="store-card"></div><div class="store-card"></div><div class="store-card"></div><div class="store-card"></div>
+    <div class="store-card"></div><div class="store-card"></div><div class="store-card"></div><div class="store-card"></div>
+  </div>
+</main>
+
+<dialog class="cg-dialog" id="concierge" aria-labelledby="cg-title">
+  <div class="cg-panel">
+    <header class="cg-head">
+      <div class="cg-title-row">
+        <h2 id="cg-title" class="t-h3">Help me choose</h2>
+        <span class="chip chip-ai">AI-assisted</span>
+      </div>
+      <button class="btn btn-ghost cg-close" type="button" data-action="close">Close</button>
+    </header>
+
+    <div class="cg-progress" data-region="progress">
+      <p id="cg-step-label" class="t-label-sm text-secondary">Question 1 of 5</p>
+      <div class="cg-bar" role="progressbar" aria-labelledby="cg-step-label" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1"><span></span></div>
+    </div>
+
+    <ul class="cg-answers" data-region="answers" aria-label="Your answers so far. Select one to change it." hidden></ul>
+
+    <div class="cg-body">
+      <!-- 1. Quantity -->
+      <section class="cg-step" data-step="1" aria-labelledby="q1-title">
+        <h3 id="q1-title" class="t-h2" tabindex="-1">How many laptops do you need?</h3>
+        <p id="q1-help" class="t-body-sm text-secondary">We use this to price the whole order and check that every laptop can ship.</p>
+        <div class="cg-qty">
+          <button class="btn btn-secondary cg-qty-step" type="button" data-qty="-1" aria-label="One fewer laptop">&minus;</button>
+          <input class="cg-qty-input" id="q1-input" type="number" inputmode="numeric" min="1" max="500" step="1" aria-labelledby="q1-title" aria-describedby="q1-help q1-error">
+          <button class="btn btn-secondary cg-qty-step" type="button" data-qty="1" aria-label="One more laptop">+</button>
+        </div>
+        <div class="cg-quick" role="group" aria-label="Common team sizes">
+          <button class="chip chip-neutral cg-quick-btn" type="button" data-set="5">5</button>
+          <button class="chip chip-neutral cg-quick-btn" type="button" data-set="10">10</button>
+          <button class="chip chip-neutral cg-quick-btn" type="button" data-set="25">25</button>
+          <button class="chip chip-neutral cg-quick-btn" type="button" data-set="50">50</button>
+        </div>
+        <p class="cg-error t-body-sm" id="q1-error" aria-live="polite"></p>
+      </section>
+
+      <!-- 2. Use -->
+      <section class="cg-step" data-step="2" aria-labelledby="q2-title" hidden>
+        <h3 id="q2-title" class="t-h2" tabindex="-1">What will your team mostly use these laptops for?</h3>
+        <p id="q2-help" class="t-body-sm text-secondary">Choose all that apply. We match performance to the work, so you don't pay for power nobody uses.</p>
+        <fieldset class="option-group" aria-labelledby="q2-title" aria-describedby="q2-help q2-error">
+          <label class="option"><input class="option-input" type="checkbox" name="use" value="Email, documents and video calls"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Email, documents and video calls</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="use" value="Spreadsheets and data analysis"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Spreadsheets and data analysis</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="use" value="Design, photo or video editing"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Design, photo or video editing</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="use" value="Software development"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Software development</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="use" value="Front desk or point of sale"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Front desk or point of sale</span></label>
+        </fieldset>
+        <p class="cg-error t-body-sm" id="q2-error" aria-live="polite"></p>
+      </section>
+
+      <!-- 3. Travel -->
+      <section class="cg-step" data-step="3" aria-labelledby="q3-title" hidden>
+        <h3 id="q3-title" class="t-h2" tabindex="-1">How much does your team travel?</h3>
+        <p id="q3-help" class="t-body-sm text-secondary">This decides how much weight and battery life matter.</p>
+        <fieldset class="option-group" aria-labelledby="q3-title" aria-describedby="q3-help q3-error">
+          <label class="option"><input class="option-input" type="radio" name="travel" value="Mostly at desks"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">Mostly at desks</span></label>
+          <label class="option"><input class="option-input" type="radio" name="travel" value="Some travel or hybrid"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">Some travel or hybrid</span></label>
+          <label class="option"><input class="option-input" type="radio" name="travel" value="On the road every week"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">On the road every week</span></label>
+        </fieldset>
+        <p class="cg-error t-body-sm" id="q3-error" aria-live="polite"></p>
+      </section>
+
+      <!-- 4. Budget -->
+      <section class="cg-step" data-step="4" aria-labelledby="q4-title" hidden>
+        <h3 id="q4-title" class="t-h2" tabindex="-1">What's your budget per laptop?</h3>
+        <p id="q4-help" class="t-body-sm text-secondary">Before tax. We treat this as a limit, and we'll show the total for your whole team.</p>
+        <fieldset class="option-group" aria-labelledby="q4-title" aria-describedby="q4-help q4-error">
+          <label class="option"><input class="option-input" type="radio" name="budget" value="Under $800"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">Under $800</span></label>
+          <label class="option"><input class="option-input" type="radio" name="budget" value="$800 to $1,200"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">$800 to $1,200</span></label>
+          <label class="option"><input class="option-input" type="radio" name="budget" value="$1,200 to $1,800"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">$1,200 to $1,800</span></label>
+          <label class="option"><input class="option-input" type="radio" name="budget" value="Over $1,800"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">Over $1,800</span></label>
+          <label class="option"><input class="option-input" type="radio" name="budget" value="Not sure yet"><span class="option-box option-box-radio" aria-hidden="true"></span><span class="option-label">Not sure yet. Show me what fits the work.</span></label>
+        </fieldset>
+        <p class="cg-error t-body-sm" id="q4-error" aria-live="polite"></p>
+      </section>
+
+      <!-- 5. Must-haves (optional) -->
+      <section class="cg-step" data-step="5" aria-labelledby="q5-title" hidden>
+        <h3 id="q5-title" class="t-h2" tabindex="-1">Anything your team can't do without?</h3>
+        <p id="q5-help" class="t-body-sm text-secondary">Optional. Skip this if none of these matter.</p>
+        <fieldset class="option-group" aria-labelledby="q5-title" aria-describedby="q5-help">
+          <label class="option"><input class="option-input" type="checkbox" name="extras" value="Windows 11 Pro for IT management"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Windows 11 Pro for IT management</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="extras" value="Larger 15 to 16 inch screen"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Larger 15 to 16 inch screen</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="extras" value="Touch screen"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">Touch screen</span></label>
+          <label class="option"><input class="option-input" type="checkbox" name="extras" value="All-day battery"><span class="option-box" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="option-label">All-day battery</span></label>
+        </fieldset>
+      </section>
+
+      <!-- Checking the catalog -->
+      <section class="cg-step cg-status" data-step="loading" aria-labelledby="ql-title" hidden>
+        <div class="cg-spinner" aria-hidden="true"></div>
+        <h3 id="ql-title" class="t-h2" tabindex="-1">Checking the catalog</h3>
+        <p class="t-body-md text-secondary">Matching your answers to live prices and stock for every laptop you need.</p>
+      </section>
+
+      <!-- Placeholder until the results screen is built -->
+      <section class="cg-step cg-status" data-step="done" aria-labelledby="qd-title" hidden>
+        <h3 id="qd-title" class="t-h2" tabindex="-1">Your answers are saved</h3>
+        <p class="t-body-md text-secondary">The results screen is the next piece of this build. Your three picks will appear here, with prices for the whole order.</p>
+      </section>
+
+      <!-- Talk to a sales rep -->
+      <section class="cg-step cg-status" data-step="rep" aria-labelledby="qr-title" hidden>
+        <h3 id="qr-title" class="t-h2" tabindex="-1">Talk to a sales rep</h3>
+        <p class="t-body-md text-secondary">Your answers so far go with you, so you won't have to repeat them. The handoff form is coming in a later piece of this build.</p>
+        <button class="btn btn-secondary" type="button" data-action="resume">Back to the questions</button>
+      </section>
+    </div>
+
+    <footer class="cg-foot" data-region="foot">
+      <button class="btn btn-ghost" type="button" data-action="rep">Not sure? Talk to a sales rep</button>
+      <div class="cg-nav">
+        <button class="btn btn-secondary" type="button" data-action="back">Back</button>
+        <button class="btn btn-primary" type="button" data-action="next">Next</button>
+      </div>
+    </footer>
+  </div>
+</dialog>
+
+<script src="js/theme.js" defer></script>
+<script src="js/concierge.js" defer></script>
+</body>
+</html>

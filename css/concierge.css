@@ -1,0 +1,118 @@
+/* AI Buying Concierge: demo store page and the concierge dialog */
+
+/* Demo store page (a stand-in for a real product listing) */
+
+.demo-banner {
+  margin: 0; padding: var(--space-2) var(--space-4); text-align: center;
+  background: var(--color-bg-subtle); color: var(--color-text-secondary);
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.store-header {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  max-width: 1120px; margin: 0 auto; padding: var(--space-4);
+}
+
+.store-main { max-width: 1120px; margin: 0 auto; padding: var(--space-4) var(--space-4) var(--space-16); display: grid; gap: var(--space-2); }
+
+.store-helper {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap;
+  margin: var(--space-6) 0; padding: var(--space-6);
+  background: var(--color-bg-accent-subtle); border: var(--border-width) solid var(--color-border-accent);
+  border-radius: var(--radius-lg);
+}
+.store-helper > div { display: grid; gap: var(--space-1); max-width: 620px; }
+
+.store-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+.store-card { aspect-ratio: 3 / 4; border-radius: var(--radius-md); background: var(--color-bg-subtle); border: var(--border-width) solid var(--color-border-subtle); }
+
+/* Dialog */
+
+body.cg-open { overflow: hidden; }
+
+.cg-dialog {
+  width: min(var(--size-dialog-max), calc(100vw - var(--space-8)));
+  max-height: min(860px, calc(100vh - var(--space-8)));
+  padding: 0; border: 0; border-radius: var(--radius-lg);
+  background: var(--color-bg-surface); color: var(--color-text-primary);
+  box-shadow: var(--shadow-dialog);
+}
+.cg-dialog::backdrop { background: var(--color-bg-scrim); }
+
+.cg-panel { display: flex; flex-direction: column; max-height: inherit; }
+
+.cg-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-2) var(--space-6);
+}
+.cg-title-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.cg-close { padding: 0 var(--space-3); }
+
+.cg-progress { display: grid; gap: var(--space-2); padding: 0 var(--space-6); }
+.cg-bar { height: 6px; border-radius: var(--radius-full); background: var(--color-bg-subtle); overflow: hidden; }
+.cg-bar span {
+  display: block; height: 100%; width: var(--progress, 20%);
+  background: var(--color-bg-accent); border-radius: inherit; transition: width 0.25s ease;
+}
+
+.cg-answers { list-style: none; margin: 0; padding: var(--space-4) var(--space-6) 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.cg-answer { border: 0; cursor: pointer; min-height: 32px; font-family: var(--font-sans); }
+.cg-answer:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+.cg-answer:focus-visible { outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px; }
+
+.cg-body { overflow-y: auto; padding: var(--space-6); }
+.cg-step { display: grid; gap: var(--space-3); }
+.cg-step h3:focus { outline: none; }
+.cg-step .option-group { margin-top: var(--space-2); }
+
+.cg-error { min-height: 20px; color: var(--color-text-critical); }
+.cg-error:empty { min-height: 0; }
+
+/* Quantity */
+.cg-qty { display: flex; align-items: stretch; gap: var(--space-2); margin-top: var(--space-2); }
+.cg-qty-step { width: var(--size-control); padding: 0; font-size: var(--font-size-xl); }
+.cg-qty-input {
+  width: 120px; min-height: var(--size-control); padding: 0 var(--space-4);
+  border: var(--border-width) solid var(--color-border-control); border-radius: var(--radius-sm);
+  background: var(--color-bg-surface); color: var(--color-text-primary);
+  font-family: var(--font-mono); font-size: var(--font-size-lg); text-align: center;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.cg-qty-input::-webkit-outer-spin-button, .cg-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.cg-qty-input:focus-visible { outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px; }
+.cg-qty-input[aria-invalid="true"] { border-color: var(--color-text-critical); }
+
+.cg-quick { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.cg-quick-btn { border: var(--border-width) solid transparent; cursor: pointer; min-height: 36px; padding: 0 var(--space-4); font-family: var(--font-sans); }
+.cg-quick-btn:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+.cg-quick-btn[aria-pressed="true"] { background: var(--color-bg-accent-subtle); color: var(--color-text-accent); border-color: var(--color-border-accent); }
+.cg-quick-btn:focus-visible { outline: var(--border-width-focus) solid var(--color-border-focus); outline-offset: 2px; }
+
+/* Status views: checking the catalog, saved, talk to a rep */
+.cg-status { justify-items: start; padding: var(--space-4) 0; }
+.cg-spinner {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 3px solid var(--color-bg-accent-subtle); border-top-color: var(--color-bg-accent);
+  animation: cg-spin 0.9s linear infinite;
+}
+@keyframes cg-spin { to { transform: rotate(360deg); } }
+
+/* Footer */
+.cg-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
+  padding: var(--space-4) var(--space-6); border-top: var(--border-width) solid var(--color-border-subtle);
+}
+.cg-foot .btn-ghost { padding: 0 var(--space-2); }
+.cg-nav { display: flex; gap: var(--space-3); margin-left: auto; }
+
+/* Phones: the dialog fills the screen, and the footer stays in reach of a thumb */
+@media (max-width: 640px) {
+  .store-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cg-dialog { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+  .cg-panel { height: 100%; }
+  .cg-body { flex: 1; padding: var(--space-5) var(--space-4); }
+  .cg-head, .cg-progress, .cg-answers { padding-left: var(--space-4); padding-right: var(--space-4); }
+  .cg-foot { padding: var(--space-3) var(--space-4); flex-direction: column-reverse; align-items: stretch; }
+  .cg-nav { margin-left: 0; }
+  .cg-nav .btn { flex: 1; }
+}
