@@ -37,7 +37,7 @@ Plain HTML, CSS and a little JavaScript. No framework and no build step.
 - **Orchid** is reserved for the "AI-assisted" label, so AI content is always marked.
 - **Amber** flags budget gaps. Nothing uses alarm red for a catalog outage, because that isn't the buyer's error.
 - **Catalog facts** (specs, prices, stock) are set in Geist Mono, so real data never looks like generated text.
-- Every text color pair meets WCAG AA in both themes. Controls are at least 44px tall.
+- Every text color pair meets WCAG AA in both themes, and dark mode goes further than the minimum: text is softened from pure white to avoid glare, secondary text sits at 7.7:1 or higher, and cards are lighter than the dialog behind them so surfaces separate without shadows. Controls are at least 44px tall.
 - Answer options are real checkboxes, so keyboards and screen readers work without extra code. Selected never relies on color alone.
 - Questions come one at a time in a native dialog, so focus stays inside, Escape closes it, and focus returns to the button. Answers are kept if the buyer closes it, and each answer chip jumps back to that question.
 - Quantity is the first question, so every price can be shown for the whole order.

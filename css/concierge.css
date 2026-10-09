@@ -74,7 +74,7 @@ body.cg-open { overflow: hidden; }
 .cg-qty-input {
   width: 120px; min-height: var(--size-control); padding: 0 var(--space-4);
   border: var(--border-width) solid var(--color-border-control); border-radius: var(--radius-sm);
-  background: var(--color-bg-surface); color: var(--color-text-primary);
+  background: var(--color-bg-raised); color: var(--color-text-primary);
   font-family: var(--font-mono); font-size: var(--font-size-lg); text-align: center;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -183,7 +183,7 @@ body.cg-open { overflow: hidden; }
 .cg-input {
   width: 100%; min-height: var(--size-control); padding: var(--space-3) var(--space-4);
   border: var(--border-width) solid var(--color-border-control); border-radius: var(--radius-sm);
-  background: var(--color-bg-surface); color: var(--color-text-primary);
+  background: var(--color-bg-raised); color: var(--color-text-primary);
   font: inherit; font-size: var(--font-size-md);
 }
 .cg-input::placeholder { color: var(--color-text-secondary); }

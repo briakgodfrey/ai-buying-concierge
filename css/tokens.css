@@ -9,14 +9,17 @@
   --white: #FFFFFF;
 
   --ink-50: #F5F7F8;
+  --ink-75: #E6EAEE;
   --ink-100: #EDF0F2;
   --ink-200: #DDE2E6;
   --ink-300: #C1C9D0;
+  --ink-350: #B3BDC7;
   --ink-400: #97A3AE;
   --ink-500: #6E7C8A;
   --ink-600: #526273;
   --ink-700: #384858;
   --ink-800: #22303D;
+  --ink-850: #1E2935;
   --ink-900: #16202A;
   --ink-950: #0E151C;
 
@@ -88,6 +91,7 @@
 [data-theme="light"] {
   --color-bg-canvas: var(--paper);
   --color-bg-surface: var(--white);
+  --color-bg-raised: var(--white);
   --color-bg-subtle: var(--ink-50);
   --color-bg-inverse: var(--ink-900);
   --color-bg-accent: var(--cobalt-700);
@@ -124,10 +128,14 @@
   color-scheme: light;
 }
 
-/* Semantic tokens: dark */
+/* Semantic tokens: dark
+   Text is softened slightly from pure white to avoid glare, secondary text
+   stays well above AA, and raised surfaces (cards) are lighter than the
+   dialog behind them, the way shadows do the job in light mode. */
 [data-theme="dark"] {
   --color-bg-canvas: var(--ink-950);
   --color-bg-surface: var(--ink-900);
+  --color-bg-raised: var(--ink-850);
   --color-bg-subtle: var(--ink-800);
   --color-bg-inverse: var(--ink-50);
   --color-bg-accent: var(--cobalt-300);
@@ -140,8 +148,8 @@
   --color-bg-disabled: var(--ink-800);
   --color-bg-scrim: rgba(0, 0, 0, 0.64);
 
-  --color-text-primary: var(--ink-50);
-  --color-text-secondary: var(--ink-400);
+  --color-text-primary: var(--ink-75);
+  --color-text-secondary: var(--ink-350);
   --color-text-inverse: var(--ink-950);
   --color-text-on-accent: var(--ink-950);
   --color-text-accent: var(--cobalt-300);
@@ -157,8 +165,8 @@
   --color-border-focus: var(--orchid-300);
   --color-border-disabled: var(--ink-700);
 
-  --color-icon-primary: var(--ink-50);
-  --color-icon-secondary: var(--ink-400);
+  --color-icon-primary: var(--ink-75);
+  --color-icon-secondary: var(--ink-350);
   --color-icon-accent: var(--cobalt-300);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px -2px rgba(0, 0, 0, 0.4);

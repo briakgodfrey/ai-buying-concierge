@@ -55,7 +55,7 @@ a { color: var(--color-text-accent); text-underline-offset: 3px; }
 .t-label-sm { font-size: var(--font-size-sm); line-height: 18px; font-weight: 500; }
 .t-label-xs { font-size: var(--font-size-xs); line-height: 16px; font-weight: 600; letter-spacing: 0.2px; }
 .t-data-md { font-family: var(--font-mono); font-size: var(--font-size-sm); line-height: 20px; }
-.t-data-sm { font-family: var(--font-mono); font-size: var(--font-size-xs); line-height: 16px; }
+.t-data-sm { font-family: var(--font-mono); font-size: 13px; line-height: 18px; }
 .t-data-price { font-family: var(--font-mono); font-size: var(--font-size-lg); line-height: 24px; font-weight: 500; }
 
 @media (max-width: 640px) {
